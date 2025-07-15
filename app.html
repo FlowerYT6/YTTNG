@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YouTube HD Thumbnail Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    input { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 10px; }
+    button { padding: 10px 20px; font-size: 16px; margin-right: 10px; }
+    img { margin-top: 20px; width: 100%; max-width: 100%; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+    p { margin-top: 15px; font-size: 16px; }
+    a.download-btn { display: inline-block; margin-top: 10px; background: #007BFF; color: white; padding: 10px 15px; border-radius: 6px; text-decoration: none; }
+    a.download-btn:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+
+<h2>YouTube Full HD Thumbnail Generator</h2>
+<input type="text" id="ytInput" placeholder="Paste YouTube link or video ID">
+<button onclick="generate()">Generate</button>
+
+<div id="result">
+  <p id="linkOutput"></p>
+  <img id="thumbPreview" style="display:none;">
+  <br>
+  <a id="downloadBtn" class="download-btn" href="#" download target="_blank" style="display:none;">Download Thumbnail</a>
+</div>
+
+<script>
+function generate() {
+  const input = document.getElementById("ytInput").value.trim();
+  let videoId = "";
+
+  if (input.includes("youtube.com/watch?v=")) {
+    const urlParams = new URLSearchParams(input.split("?")[1]);
+    videoId = urlParams.get("v");
+  } else if (input.includes("youtu.be/")) {
+    videoId = input.split("youtu.be/")[1].split("?")[0];
+  } else {
+    videoId = input;
+  }
+
+  if (!videoId || videoId.length !== 11) {
+    document.getElementById("result").innerHTML = "<p style='color:red;'>Invalid YouTube link or video ID.</p>";
+    return;
+  }
+
+  const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+
+  document.getElementById("linkOutput").innerHTML = 
+    `<p>Full HD Thumbnail Link: <a href="${thumbnailUrl}" target="_blank">${thumbnailUrl}</a></p>`;
+  
+  const img = document.getElementById("thumbPreview");
+  img.src = thumbnailUrl;
+  img.style.display = "block";
+
+  const dlBtn = document.getElementById("downloadBtn");
+  dlBtn.href = thumbnailUrl;
+  dlBtn.style.display = "inline-block";
+}
+</script>
+
+</body>
+</html>
